@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "PRBMS | Roadtax Pro"
+description = "A Bahasa Melayu-first business management dashboard for a Malaysian vehicle insurance and road tax service. Uses fictional prototype data to manage customers, vehicles, renewals, quotations, invoices, finances, reports, and staff roles; no real customer storage or insurer integrations."
+version = "1.0.0"
+id = "artifacts/prbms"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23821
+
+[services.development]
+run = "pnpm --filter @workspace/prbms run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/prbms", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/prbms/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23821"
+BASE_PATH = "/"
