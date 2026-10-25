@@ -1,5 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { Link, useLocation } from 'wouter';
+import { CustomerManagement } from '@/components/customers/CustomerManagement';
+import { DEMO_CUSTOMERS, type CustomerRecord } from '@/components/customers/customer-types';
 import {
   Activity, ArrowDownRight, ArrowRight, ArrowUpRight, Bell, CalendarDays,
   CarFront, Check, ChevronDown, ChevronLeft, ChevronRight, CircleHelp,
@@ -82,6 +84,7 @@ const pageInfo: Record<string, { title: string; crumb: string; desc: string; act
 
 function App() {
   const [path, setPath] = useLocation();
+  const [customers, setCustomers] = useState<CustomerRecord[]>(DEMO_CUSTOMERS);
   const [mobileNav, setMobileNav] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('Semua');
@@ -142,7 +145,9 @@ function App() {
         </header>
         <div className="content">
           {isDashboard ? <Dashboard period={period} setPeriod={setPeriod} onNavigate={setPath} flash={flash} /> :
-            <ModulePage path={current} info={info} rows={rows} query={query} setQuery={setQuery} filter={filter} setFilter={setFilter} onAction={handleAction} flash={flash} />}
+            current === '/pelanggan' ?
+              <CustomerManagement customers={customers} setCustomers={setCustomers} notify={flash} /> :
+              <ModulePage path={current} info={info} rows={rows} query={query} setQuery={setQuery} filter={filter} setFilter={setFilter} onAction={handleAction} flash={flash} />}
           <footer className="footer"><span>© 2025 Roadtax Pro <b>·</b> Ruang kerja demo</span><span>Data contoh sahaja <span className="footer-dot" /> Semua tindakan tidak disimpan</span></footer>
         </div>
       </main>
