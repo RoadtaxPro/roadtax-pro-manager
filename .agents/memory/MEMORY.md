@@ -1,1 +1,1 @@
-- [PRBMS product boundaries](prbms-product.md) — Keep the prototype demo-only with fictional data; preserve Roadtax Pro’s Malaysian language, currency, and brand requirements.
+- [PRBMS product boundaries](prbms-product.md) — Keep PRBMS English-first and Malaysian-localized; preserve the current modules and session-only prototype boundary.

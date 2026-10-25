@@ -1,5 +1,5 @@
-export type CustomerType = 'Individu' | 'Syarikat';
-export type CustomerStatus = 'Aktif' | 'Tidak aktif';
+export type CustomerType = 'Individual' | 'Company';
+export type CustomerStatus = 'Active' | 'Inactive';
 
 export type CustomerRecord = {
   customerId: string;
@@ -12,55 +12,60 @@ export type CustomerRecord = {
   registrationDate: string;
   status: CustomerStatus;
   vehicleIds: string[];
+  relatedRecordIds: string[];
 };
 
 export const DEMO_CUSTOMERS: CustomerRecord[] = [
   {
     customerId: 'RTP-DEMO-0001',
     fullName: 'Aisyah Contoh',
-    customerType: 'Individu',
+    customerType: 'Individual',
     phoneNumber: '012-000 0101',
     email: 'aisyah@example.com',
-    mailingAddress: 'Alamat contoh, Kuala Lumpur',
-    notes: 'Rekod rekaan untuk pratonton sahaja.',
+    mailingAddress: 'Sample address, Kuala Lumpur',
+    notes: 'Fictional record for preview only.',
     registrationDate: '2025-06-12',
-    status: 'Aktif',
+    status: 'Active',
     vehicleIds: [],
+    relatedRecordIds: [],
   },
   {
     customerId: 'RTP-DEMO-0002',
     fullName: 'Perniagaan Contoh Maju Sdn. Bhd.',
-    customerType: 'Syarikat',
+    customerType: 'Company',
     phoneNumber: '03-0000 0202',
-    email: 'admin@contoh.example',
-    mailingAddress: 'Alamat pejabat contoh, Selangor',
-    notes: 'Maklumat syarikat contoh.',
+    email: 'admin@example.com',
+    mailingAddress: 'Sample office address, Selangor',
+    notes: 'Sample company information.',
     registrationDate: '2025-05-28',
-    status: 'Aktif',
+    status: 'Active',
     vehicleIds: [],
+    relatedRecordIds: [],
   },
   {
     customerId: 'RTP-DEMO-0003',
     fullName: 'Imran Hakim Contoh',
-    customerType: 'Individu',
+    customerType: 'Individual',
     phoneNumber: '013-000 0303',
     email: '',
     mailingAddress: '',
     notes: '',
     registrationDate: '2025-04-03',
-    status: 'Aktif',
+    status: 'Active',
     vehicleIds: [],
+    relatedRecordIds: [],
   },
   {
     customerId: 'RTP-DEMO-0004',
     fullName: 'Kedai Runcit Demo',
-    customerType: 'Syarikat',
+    customerType: 'Company',
     phoneNumber: '04-000 0404',
     email: 'kedai@example.com',
-    mailingAddress: 'Alamat rekaan, Pulau Pinang',
-    notes: 'Pelanggan contoh tidak aktif.',
+    mailingAddress: 'Fictional address, Penang',
+    notes: 'Inactive sample customer.',
     registrationDate: '2024-11-19',
-    status: 'Tidak aktif',
+    status: 'Inactive',
     vehicleIds: [],
+    relatedRecordIds: [],
   },
 ];

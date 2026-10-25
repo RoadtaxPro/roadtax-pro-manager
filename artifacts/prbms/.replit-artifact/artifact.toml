@@ -1,7 +1,7 @@
 kind = "web"
 previewPath = "/"
 title = "PRBMS | Roadtax Pro"
-description = "A Bahasa Melayu-first business management dashboard for a Malaysian vehicle insurance and road tax service. Uses fictional prototype data to manage customers, vehicles, renewals, quotations, invoices, finances, reports, and staff roles; no real customer storage or insurer integrations."
+description = "An English-language management system for Roadtax Pro, a Malaysian vehicle insurance and road tax service. It uses fictional prototype data for customers, vehicles, renewals, quotations, invoices, finance, reports, and staff roles. Records and CSV imports are kept only in the current demo session; there is no database, authentication, or insurer integration."
 version = "1.0.0"
 id = "artifacts/prbms"
 router = "path"
