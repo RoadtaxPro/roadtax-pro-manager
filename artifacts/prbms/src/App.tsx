@@ -12,6 +12,13 @@ import {
 
 type Row = { name: string; detail: string; status: string; amount?: string; date?: string; extra?: string };
 
+const TEAM_ROLES = [
+  'General Manager',
+  'Manager, Sales & Marketing',
+  'Manager, Operations & Customer Service',
+  'Manager, Finance & Administration',
+] as const;
+
 const nav = [
   { title: 'Workspace', links: [
     { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -26,7 +33,7 @@ const nav = [
   ]},
   { title: 'Organization', links: [
     { label: 'Reports & Analytics', path: '/laporan', icon: FileBarChart2 },
-    { label: 'User Management', path: '/pengguna', icon: Settings2 },
+    { label: 'Team & Access', path: '/pengguna', icon: Settings2 },
   ]},
 ];
 
@@ -64,10 +71,10 @@ const mockRows: Record<string, Row[]> = {
     { name: 'INV-2025-0318', detail: 'Siti Hajar Mohd Noor · JQK 7308', status: 'Overdue', date: '09 June 2025', amount: 'RM 1,534.00' },
   ],
   '/pengguna': [
-    { name: 'Farah Nadia Zulkifli', detail: 'farah.nadia@roadtaxpro.demo', status: 'General Manager', date: 'Active', extra: 'FN' },
-    { name: 'Azlan Hakim', detail: 'azlan.hakim@roadtaxpro.demo', status: 'Sales & Marketing', date: 'Active', extra: 'AH' },
-    { name: 'Liew Wei Jian', detail: 'liew.weijian@roadtaxpro.demo', status: 'Operations & Customer Service', date: 'Active', extra: 'LW' },
-    { name: 'Nadia Syafiqah', detail: 'nadia.syafiqah@roadtaxpro.demo', status: 'Finance & Administration', date: 'Active', extra: 'NS' },
+    { name: 'Syukri', detail: 'Demo member · No account', status: TEAM_ROLES[0], date: 'Active', extra: 'SY' },
+    { name: 'Intan', detail: 'Demo member · No account', status: TEAM_ROLES[1], date: 'Active', extra: 'IN' },
+    { name: 'Saufi', detail: 'Demo member · No account', status: TEAM_ROLES[2], date: 'Active', extra: 'SA' },
+    { name: 'Adham', detail: 'Demo member · No account', status: TEAM_ROLES[3], date: 'Active', extra: 'AD' },
   ],
 };
 
@@ -79,7 +86,7 @@ const pageInfo: Record<string, { title: string; crumb: string; desc: string; act
   '/invois': { title: 'Invoices', crumb: 'Customer payments', desc: 'Track invoices, collections, and outstanding balances.', action: 'Create Invoice' },
   '/kewangan': { title: 'Finance', crumb: 'Financial overview', desc: 'Separate service revenue, commissions, and customer premiums.', action: 'Record Transaction' },
   '/laporan': { title: 'Reports & Analytics', crumb: 'Business analytics', desc: 'Review Roadtax Pro operational performance in one place.', action: 'Download Report' },
-  '/pengguna': { title: 'User Management', crumb: 'Team & access', desc: 'Manage team members and workspace access roles.', action: 'Add User' },
+  '/pengguna': { title: 'Team & Access', crumb: 'Team & Access', desc: 'Review prototype team roles and responsibilities.', action: 'Add User' },
 };
 
 function App() {
@@ -119,7 +126,7 @@ function App() {
       <aside className={`sidebar ${mobileNav ? 'sidebar-open' : ''}`}>
         <Link href="/dashboard" className="brand" onClick={() => setMobileNav(false)}>
           <span className="brand-mark"><ShieldCheck size={21} strokeWidth={2.4} /></span>
-          <span className="brand-text">roadtax<span>pro</span><small>WORKSPACE</small></span>
+          <span className="brand-text">roadtax<span>pro</span><small>RPMS · WORKSPACE</small></span>
         </Link>
         <div className="workspace-switch">
           <div className="workspace-icon">RP</div><div className="workspace-name">Roadtax Pro<small>Kuala Lumpur Team</small></div><ChevronDown size={15} />
@@ -137,18 +144,24 @@ function App() {
         <div className="sidebar-bottom">
           <div className="help-box"><CircleHelp size={17} /><div><b>Need help?</b><small>Contact the support team</small></div><ArrowRight size={15} /></div>
           <div className="profile">
-            <div className="avatar">FN</div><div className="profile-name">Farah Nadia<small>{role}</small></div><button className="icon-btn light" onClick={() => flash('Profile settings (demo)')} aria-label="Profile settings"><MoreHorizontal size={18} /></button>
+            <div className="avatar">SY</div><div className="profile-name">Syukri<small>{role}</small></div><button className="icon-btn light" onClick={() => flash('Profile settings (demo)')} aria-label="Profile settings"><MoreHorizontal size={18} /></button>
           </div>
         </div>
       </aside>
       <main className="main-area">
         <header className="topbar">
-          <button className="mobile-menu icon-btn" onClick={() => setMobileNav(true)} aria-label="Buka menu"><Menu size={20} /></button>
+          <button className="mobile-menu icon-btn" onClick={() => setMobileNav(true)} aria-label="Open menu"><Menu size={20} /></button>
           <div className="crumb"><span>Roadtax Pro</span><ChevronRight size={14} /><b>{isDashboard ? 'Dashboard' : info.crumb}</b></div>
           <div className="top-actions">
           <div className="today"><CalendarDays size={15} /> Thursday, June 12, 2025</div>
           <button className="icon-btn notification" onClick={() => flash('No new notifications')} aria-label="Notifications"><Bell size={18} /><i /></button>
-          <div className="role-select"><select value={role} onChange={(e) => setRole(e.target.value)} aria-label="Select role" data-testid="select-role"><option>General Manager</option><option>Sales & Marketing</option><option>Operations & Customer Service</option><option>Finance & Administration</option></select><ChevronDown size={13} /></div>
+          <div className="role-select">
+            <span className="role-preview-tag">DEMO</span>
+            <select value={role} onChange={(e) => setRole(e.target.value)} aria-label="Demo role preview; access restrictions are not enforced" title="Demo role preview only; access restrictions are not enforced" data-testid="select-role">
+              {TEAM_ROLES.map((teamRole) => <option key={teamRole}>{teamRole}</option>)}
+            </select>
+            <ChevronDown size={13} />
+          </div>
           </div>
         </header>
         <div className="content">
@@ -156,14 +169,14 @@ function App() {
             current === '/pelanggan' ?
               <CustomerManagement customers={customers} setCustomers={setCustomers} notify={flash} hasExternalRelatedRecords={hasRelatedCustomerRecords} /> :
               <ModulePage path={current} info={info} rows={rows} query={query} setQuery={setQuery} filter={filter} setFilter={setFilter} onAction={handleAction} flash={flash} />}
-          <footer className="footer"><span>© 2025 Roadtax Pro <b>·</b> Demo workspace</span><span>Fictional sample data only <span className="footer-dot" /> Changes are not saved</span></footer>
+          <footer className="footer"><span>© 2025 RPMS <b>·</b> Roadtax Pro demo workspace</span><span>Fictional sample data only <span className="footer-dot" /> Changes are not saved</span></footer>
         </div>
       </main>
       {modal && <AddModal path={current} title={info.action} onClose={() => setModal(false)} onSave={(row) => {
         setExtraRows((old) => ({ ...old, [current]: [row, ...(old[current] || [])] }));
         setModal(false); flash('Demo record added to this session only.');
       }} />}
-      {notice && <div className="toast"><span className="toast-check"><Check size={14} /></span>{notice}<button onClick={() => setNotice('')} aria-label="Tutup"><X size={15} /></button></div>}
+      {notice && <div className="toast"><span className="toast-check"><Check size={14} /></span>{notice}<button onClick={() => setNotice('')} aria-label="Close notification"><X size={15} /></button></div>}
     </div>
   );
 }
@@ -177,7 +190,7 @@ function Dashboard({ period, setPeriod, onNavigate, flash }: { period: string; s
   ];
   return <div className="dashboard-page">
     <div className="welcome-row">
-      <div><div className="eyebrow"><span className="eyebrow-line" /> THURSDAY, JUNE 12, 2025</div><h1>Good morning, Farah<span className="wave">.</span></h1><p>Here is today’s Roadtax Pro operations summary.</p></div>
+      <div><div className="eyebrow"><span className="eyebrow-line" /> THURSDAY, JUNE 12, 2025</div><h1>Good morning, Syukri<span className="wave">.</span></h1><p>Here is today’s Roadtax Pro operations summary.</p></div>
       <button className="primary-btn" onClick={() => onNavigate('/sebut-harga')}><Plus size={17} /> New Quotation</button>
     </div>
     <div className="demo-strip"><span className="demo-icon"><Activity size={15} /></span><b>Demo mode</b><span>All figures and records are fictional examples, not real customer data.</span><button onClick={() => flash('All displayed information is fictional sample data.')}>Learn more <ArrowRight size={13} /></button></div>
@@ -212,9 +225,9 @@ function Dashboard({ period, setPeriod, onNavigate, flash }: { period: string; s
       <section className="panel activity-panel">
         <div className="panel-head"><div><div className="section-kicker">RECENT</div><h2>Recent Activity</h2><p>Team updates for today</p></div><button className="icon-btn" onClick={() => flash('Demo activity view')} aria-label="View activity"><MoreHorizontal size={17} /></button></div>
         <div className="activity-list">
-          <ActivityRow initials="AH" color="lavender" title="Quotation approved" description="Azlan approved SQ-2025-0183 for Tan Mei Ling" time="10:42 AM" />
-          <ActivityRow initials="LW" color="mint" title="Payment received" description="Liew recorded RM 1,092.40 · WXY 6193" time="9:18 AM" />
-          <ActivityRow initials="NS" color="peach" title="New customer added" description="Nadia added a customer record · Amirul Hakim" time="8:56 AM" />
+          <ActivityRow initials="IN" color="lavender" title="Quotation approved" description="Intan approved SQ-2025-0183 for Tan Mei Ling" time="10:42 AM" />
+          <ActivityRow initials="AD" color="mint" title="Payment received" description="Adham recorded RM 1,092.40 · WXY 6193" time="9:18 AM" />
+          <ActivityRow initials="IN" color="peach" title="New customer added" description="Intan added a customer record · Amirul Hakim" time="8:56 AM" />
         </div>
         <button className="activity-all" onClick={() => flash('The full activity view is available in this demo.')}>View all activity <ArrowRight size={14} /></button>
       </section>
@@ -242,7 +255,7 @@ function ModulePage({ path, info, rows, query, setQuery, filter, setFilter, onAc
   const financial = path === '/kewangan';
   const reports = path === '/laporan';
   const users = path === '/pengguna';
-  const filters = path === '/pembaharuan' ? ['All', 'Pending payment', 'Overdue', 'In progress'] : path === '/invois' ? ['All', 'Unpaid', 'Paid', 'Overdue'] : path === '/kenderaan' ? ['All', 'Active', 'Expiring soon', 'Expired'] : path === '/sebut-harga' ? ['All', 'Pending', 'Approved', 'Rejected'] : ['All', 'Active', 'Action required'];
+  const filters = path === '/pembaharuan' ? ['All', 'Pending payment', 'Overdue', 'In progress'] : path === '/invois' ? ['All', 'Unpaid', 'Paid', 'Overdue'] : path === '/kenderaan' ? ['All', 'Active', 'Expiring soon', 'Expired'] : path === '/sebut-harga' ? ['All', 'Pending', 'Approved', 'Rejected'] : path === '/pengguna' ? ['All', ...TEAM_ROLES] : ['All', 'Active', 'Action required'];
   return <div className="module-page">
     <div className="module-header"><div><div className="eyebrow"><span className="eyebrow-line" /> {info.crumb.toUpperCase()}</div><h1>{info.title}</h1><p>{info.desc}</p></div><button className={`primary-btn ${reports ? 'secondary-action' : ''}`} onClick={onAction}>{reports ? <Download size={16} /> : <Plus size={17} />}{info.action}</button></div>
     {financial ? <FinanceContent /> : reports ? <ReportsContent flash={flash} /> : users ? <UsersContent rows={rows} query={query} setQuery={setQuery} onAction={onAction} flash={flash} /> : <div className="module-body">
@@ -286,10 +299,17 @@ function ReportsContent({ flash }: { flash: (v: string) => void }) {
 }
 
 function UsersContent({ rows, query, setQuery, onAction, flash }: { rows: Row[]; query: string; setQuery: (v: string) => void; onAction: () => void; flash: (v: string) => void }) {
-  const roles = ['General Manager', 'Sales & Marketing', 'Operations & Customer Service', 'Finance & Administration'];
+  const roles = TEAM_ROLES;
   const [activeRole, setActiveRole] = useState('All roles');
   const roleRows = rows.filter((r) => activeRole === 'All roles' || r.status === activeRole);
-  return <div className="users-layout"><div className="role-cards">{roles.map((r, i) => <button key={r} className={`role-card ${activeRole === r ? 'role-selected' : ''}`} onClick={() => setActiveRole(activeRole === r ? 'All roles' : r)}><span className={`role-number role-color-${i}`}>0{i + 1}</span><b>{r}</b><small>{[1, 2, 2, 1][i]} demo users</small><ArrowRight size={15} /></button>)}</div><div className="data-panel users-panel"><div className="table-toolbar"><div className="table-title"><h2>Your Team</h2><span className="live-tag"><i /> 4 users</span></div><div className="table-tools"><label className="search-field"><Search size={16} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search users..." /></label><button className="primary-btn small-primary" onClick={onAction}><Plus size={15} /> Add User</button></div></div><div className="team-list">{roleRows.map((r, i) => <div className="team-row" key={r.name}><div className={`avatar team-avatar avatar-${i}`}>{r.extra}</div><div className="team-person"><b>{r.name}</b><small>{r.detail}</small></div><Status status={r.status} /><span className="team-active"><i /> Active</span><button className="row-action" onClick={() => flash(`Edit user ${r.name} (demo)`)} aria-label={`Edit user ${r.name}`}><MoreHorizontal size={18} /></button></div>)}</div><div className="role-note"><ShieldCheck size={17} /><span>Roles control access to workspace features. The role selector in the top-right corner is for demo preview only.</span></div></div><div className="permission-panel"><div className="permission-heading"><div><div className="section-kicker">ACCESS GUIDE</div><h2>Roles & Responsibilities</h2></div><button className="text-link" onClick={() => flash('Access guide (demo)')}>View guide <ArrowRight size={14} /></button></div><div className="permission-grid">{roles.map((r, i) => <div key={r}><span className={`permission-index role-color-${i}`}>0{i + 1}</span><b>{r}</b><p>{['Full access to manage operations and team settings.', 'Manage leads, customers, and quotations.', 'Handle renewals, documents, and customer service.', 'Manage invoices, collection records, and financial summaries.'][i]}</p></div>)}</div></div></div>;
+  const roleCounts = roles.map((teamRole) => rows.filter((row) => row.status === teamRole).length);
+  const responsibilities = [
+    'Overall operational oversight; management dashboards; team and system administration.',
+    'Customer acquisition and customer relationship management; customer records and quotations; sales and marketing reporting.',
+    'Vehicle records; renewal processing; policy and document coordination; customer service operations.',
+    'Invoices and payment records; financial tracking and reporting; administrative records.',
+  ];
+  return <div className="users-layout"><div className="role-cards">{roles.map((r, i) => <button key={r} className={`role-card ${activeRole === r ? 'role-selected' : ''}`} onClick={() => setActiveRole(activeRole === r ? 'All roles' : r)}><span className={`role-number role-color-${i}`}>0{i + 1}</span><b>{r}</b><small>{roleCounts[i]} demo {roleCounts[i] === 1 ? 'user' : 'users'}</small><ArrowRight size={15} /></button>)}</div><div className="data-panel users-panel"><div className="table-toolbar"><div className="table-title"><h2>Your Team</h2><span className="live-tag"><i /> {rows.length} demo {rows.length === 1 ? 'user' : 'users'}</span></div><div className="table-tools"><label className="search-field"><Search size={16} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search team members..." /></label><button className="primary-btn small-primary" onClick={onAction}><Plus size={15} /> Add User</button></div></div><div className="team-list">{roleRows.map((r, i) => <div className="team-row" key={r.name}><div className={`avatar team-avatar avatar-${i}`}>{r.extra}</div><div className="team-person"><b>{r.name}</b><small>{r.detail}</small></div><Status status={r.status} /><span className="team-active"><i /> Demo</span><button className="row-action" onClick={() => flash(`Edit demo team member ${r.name}`)} aria-label={`Edit demo team member ${r.name}`}><MoreHorizontal size={18} /></button></div>)}</div><div className="role-note"><ShieldCheck size={17} /><span>These role descriptions are for the prototype only. The role selector is a demo preview; access restrictions are not enforced.</span></div></div><div className="permission-panel"><div className="permission-heading"><div><div className="section-kicker">ACCESS GUIDE</div><h2>Roles & Responsibilities</h2></div><button className="text-link" onClick={() => flash('Access guide (demo)')}>View guide <ArrowRight size={14} /></button></div><div className="permission-grid">{roles.map((r, i) => <div key={r}><span className={`permission-index role-color-${i}`}>0{i + 1}</span><b>{r}</b><p>{responsibilities[i]}</p></div>)}</div></div></div>;
 }
 
 function AddModal({ path, title, onClose, onSave }: { path: string; title: string; onClose: () => void; onSave: (r: Row) => void }) {
@@ -302,9 +322,9 @@ function AddModal({ path, title, onClose, onSave }: { path: string; title: strin
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onSave({ name: isVehicle ? name.toUpperCase() : name, detail: detail || 'New demo record', status: isUser ? 'Sales & Marketing' : 'Pending', date: '12 June 2025', extra: isVehicle ? name.toUpperCase() : '012-000 0000', amount: amount ? `RM ${Number(amount).toLocaleString('en-MY', { minimumFractionDigits: 2 })}` : 'RM 0.00' });
+    onSave({ name: isVehicle ? name.toUpperCase() : name, detail: isUser ? detail || 'Demo member · No account' : detail || 'New demo record', status: isUser ? TEAM_ROLES[1] : 'Pending', date: '12 June 2025', extra: isVehicle ? name.toUpperCase() : isUser ? name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]?.toUpperCase() ?? '').join('') : '012-000 0000', amount: amount ? `RM ${Number(amount).toLocaleString('en-MY', { minimumFractionDigits: 2 })}` : 'RM 0.00' });
   };
-  return <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}><form className="modal-card" onSubmit={submit}><div className="modal-top"><div><div className="section-kicker">DEMO RECORD</div><h2>{title}</h2></div><button type="button" className="icon-btn" onClick={onClose} aria-label="Close dialog"><X size={18} /></button></div><p className="modal-description">This record is available only during the current demo session and will not be saved.</p><label className="form-label">{label}<input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder={isVehicle ? 'Example: VAB 4821' : 'Enter information'} required /></label><label className="form-label">{isVehicle ? 'Owner / vehicle model' : isUser ? 'Work email' : 'Brief details'}<input value={detail} onChange={(e) => setDetail(e.target.value)} placeholder={isVehicle ? 'Example: Perodua Myvi · Nur Aisyah' : 'Optional information'} /></label>{(path === '/invois' || path === '/sebut-harga' || path === '/pembaharuan') && <label className="form-label">Amount (RM)<input type="number" min="0" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" /></label>}<div className="modal-foot"><button type="button" className="outline-btn" onClick={onClose}>Cancel</button><button type="submit" className="primary-btn"><Check size={16} /> Add Demo Record</button></div></form></div>;
+  return <div className="modal-backdrop" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}><form className="modal-card" onSubmit={submit}><div className="modal-top"><div><div className="section-kicker">DEMO RECORD</div><h2>{title}</h2></div><button type="button" className="icon-btn" onClick={onClose} aria-label="Close dialog"><X size={18} /></button></div><p className="modal-description">{isUser ? 'This creates a prototype team entry only. No authenticated account is created, and changes are not saved.' : 'This record is available only during the current demo session and will not be saved.'}</p><label className="form-label">{label}<input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder={isVehicle ? 'Example: VAB 4821' : 'Enter information'} required /></label><label className="form-label">{isVehicle ? 'Owner / vehicle model' : isUser ? 'Optional demo email' : 'Brief details'}<input value={detail} onChange={(e) => setDetail(e.target.value)} placeholder={isVehicle ? 'Example: Perodua Myvi · Nur Aisyah' : isUser ? 'demo@example.com (optional)' : 'Optional information'} /></label>{(path === '/invois' || path === '/sebut-harga' || path === '/pembaharuan') && <label className="form-label">Amount (RM)<input type="number" min="0" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" /></label>}<div className="modal-foot"><button type="button" className="outline-btn" onClick={onClose}>Cancel</button><button type="submit" className="primary-btn"><Check size={16} /> Add Demo Record</button></div></form></div>;
 }
 
 export default App;
